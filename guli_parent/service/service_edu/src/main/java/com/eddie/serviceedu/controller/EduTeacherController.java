@@ -53,11 +53,11 @@ public class EduTeacherController {
      */
     @ApiOperation(value = "根据ID删除讲师")
     @DeleteMapping("removeTeacherById/{id}")
-    public boolean logicDeleteTeacher(
+    public R logicDeleteTeacher(
             @ApiParam(name = "id", value = "讲师ID", required = true)
             @PathVariable String id) {
-        boolean result = teacherService.removeById(id);
-        return result;
+        teacherService.removeById(id);
+        return R.ok();
     }
 
     @ApiOperation(value = "所有讲师列表")
@@ -122,6 +122,8 @@ public class EduTeacherController {
         if (!StringUtils.isEmpty(end)) {
             queryWrapper.le("gmt_modified", end);
         }
+        // 排序
+        queryWrapper.orderByDesc("gmt_create");
         // 调用方法实现条件查询分页
         teacherService.page(teacherPage, queryWrapper);
 
