@@ -1,6 +1,7 @@
 package com.eddie.servicebase.exceptionhandler;
 
 import com.eddie.commonutils.R;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Version 1.0
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     /**
      * 指定出现什么异常执行这个方法
@@ -34,6 +36,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public R error(ArithmeticException e) {
         e.printStackTrace();
+        log.error(e.getMessage());
         return R.error().message("执行了ArithmeticException异常处理....");
     }
 
