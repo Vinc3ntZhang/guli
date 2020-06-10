@@ -30,26 +30,48 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/teacher/teacherList',
     name: 'teacher',
-    meta: { title: '讲师管理', icon: 'example' },
+    meta: { title: '讲师管理', icon: 'user' },
     children: [
       {
         path: 'teacherList',
         name: 'teacherList',
         component: () => import('@/views/edu/teacher/list'),
-        meta: { title: '讲师列表', icon: 'table' }
+        meta: { title: '讲师列表', icon: 'tree' }
       },
       {
         path: 'addTeacher',
         name: 'addTeacher',
         component: () => import('@/views/edu/teacher/add'),
-        meta: { title: '添加讲师', icon: 'tree' }
+        meta: { title: '添加讲师', icon: 'table' }
       },
       {
         path: 'edit/:id',
         name: 'EduTeacherEdit',
         component: () => import('@/views/edu/teacher/add'),
-        meta: { title: '编辑讲师', icon: 'tree' },
+        meta: { title: '编辑讲师', icon: 'table' },
         hidden: true
+      }
+    ]
+  },
+
+  {
+    path: '/subject',
+    component: Layout,
+    redirect: '/subject/subjectList',
+    name: 'subject',
+    meta: { title: '课程分类管理', icon: 'example' },
+    children: [
+      {
+        path: 'subjectList',
+        name: 'subjectList',
+        component: () => import('@/views/edu/subject/list'),
+        meta: { title: '课程分类列表', icon: 'table' }
+      },
+      {
+        path: 'addSubject',
+        name: 'addSubject',
+        component: () => import('@/views/edu/subject/add'),
+        meta: { title: '课程分类添加', icon: 'tree' }
       }
     ]
   },
