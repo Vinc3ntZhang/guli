@@ -3,6 +3,7 @@ package com.eddie.serviceedu.service;
 import com.eddie.serviceedu.entity.EduCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.eddie.serviceedu.entity.vo.CourseInfoVo;
+import com.eddie.serviceedu.entity.vo.CoursePublishVo;
 
 /**
  * <p>
@@ -20,4 +21,24 @@ public interface EduCourseService extends IService<EduCourse> {
      * @return
      */
     String saveCourseInfo(CourseInfoVo courseInfoVo);
+
+    /**
+     * 根据课程id查询基本信息
+     * @param courseId
+     * @return CourseInfoVo对象
+     */
+    CourseInfoVo getCourseInfo(String courseId);
+
+    /**
+     * 修改课程信息
+     * @param courseInfoVo
+     */
+    void updateCourseInfo(CourseInfoVo courseInfoVo);
+
+    /**
+     * 根据课程id查询课程确认信息
+     * @param id
+     * @return CoursePublishVo对象
+     */
+    CoursePublishVo getPublishCourseInfo(String id);
 }
