@@ -35,12 +35,10 @@ export default {
 
   methods: {
     previous() {
-      console.log('previous')
-      this.$router.push({ path: '/course/chapter/1' })
+      this.$router.push({ path: '/course/chapter/' })
     },
 
     publish() {
-      console.log('publish')
       this.$router.push({ path: '/course/list' })
     }
   }

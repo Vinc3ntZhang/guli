@@ -16,6 +16,21 @@ export default {
       url: '/serviceedu/teacher/findAllTeacher',
       method: 'get'
     })
+  },
+  // 3、根据课程id查询课程基本信息
+  getCourseInfo(id) {
+    return request({
+      url: `/serviceedu/course/getCourseInfo/${id}`,
+      method: 'get'
+    })
+  },
+  // 4、修改课程信息
+  updateCourseInfo(courseInfo) {
+    return request({
+      url: `/serviceedu/course/updateCourseInfo`,
+      method: 'post',
+      data: courseInfo
+    })
   }
 
 }
