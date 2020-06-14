@@ -21,12 +21,14 @@
           <el-select
             v-model="courseInfo.subjectParentId"
             placeholder="一级分类"
-            @change="subjectLevelOneChanged">
+            @change="subjectLevelOneChanged"
+          >
             <el-option
               v-for="subject in subjectOneList"
               :key="subject.id"
               :label="subject.title"
-              :value="subject.id"/>
+              :value="subject.id"
+            />
           </el-select>
           <!-- 二级分类 -->
           <el-select v-model="courseInfo.subjectId" placeholder="二级分类">
@@ -34,21 +36,21 @@
               v-for="subject in subjectTwoList"
               :key="subject.id"
               :label="subject.title"
-              :value="subject.id"/>
+              :value="subject.id"
+            />
           </el-select>
         </el-form-item>
 
         <!-- 课程讲师 TODO -->
         <!-- 课程讲师 -->
         <el-form-item label="课程讲师">
-          <el-select
-            v-model="courseInfo.teacherId"
-            placeholder="请选择">
+          <el-select v-model="courseInfo.teacherId" placeholder="请选择">
             <el-option
               v-for="teacher in teacherList"
               :key="teacher.id"
               :label="teacher.name"
-              :value="teacher.id"/>
+              :value="teacher.id"
+            />
           </el-select>
         </el-form-item>
 
@@ -63,22 +65,21 @@
 
         <!-- 课程简介 TODO -->
         <el-form-item label="课程简介">
-          <tinymce :height="300" v-model="courseInfo.description"/>
+          <tinymce :height="300" v-model="courseInfo.description" />
         </el-form-item>
 
         <!-- 课程封面 TODO -->
         <!-- 课程封面-->
         <el-form-item label="课程封面">
-
           <el-upload
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             :action="BASE_API+'/eduoss/fileoss'"
-            class="avatar-uploader">
-            <img :src="courseInfo.cover">
+            class="avatar-uploader"
+          >
+            <img :src="courseInfo.cover" >
           </el-upload>
-
         </el-form-item>
 
         <el-form-item label="课程价格">
@@ -113,7 +114,8 @@ export default {
         teacherId: '',
         lessonNum: 0,
         description: '',
-        cover: 'https://eddie-study.oss-cn-shenzhen.aliyuncs.com/2020/06/07/39fbd93ffffc4b53bae2046ddcbced9ffile.png',
+        cover:
+          'https://eddie-study.oss-cn-shenzhen.aliyuncs.com/2020/06/07/39fbd93ffffc4b53bae2046ddcbced9ffile.png',
         price: 0
       },
       courseId: '',
@@ -141,7 +143,8 @@ export default {
         this.courseId = this.$route.params.id
         this.getInfo()
       } else {
-      // 初始化所有讲师
+        this.courseInfo = ''
+        // 初始化所有讲师
         this.getListTeacher()
         // 初始化一级分类
         this.getOneSubject()
@@ -223,22 +226,23 @@ export default {
           type: 'success',
           message: '添加课程信息成功！'
         })
-        this.$router.push({ path: '/course/chapter/' + resopnse.data.courseId })
+        this.$router.push({
+          path: '/course/chapter/' + resopnse.data.courseId
+        })
       })
     },
     // 修改课程
     updateCourse() {
       debugger
-      course.updateCourseInfo(this.courseInfo)
-        .then(response => {
-          // 提示
-          this.$message({
-            type: 'success',
-            message: '修改课程信息成功!'
-          })
-          // 跳转到第二步
-          this.$router.push({ path: '/course/chapter/' + this.courseId })
+      course.updateCourseInfo(this.courseInfo).then(response => {
+        // 提示
+        this.$message({
+          type: 'success',
+          message: '修改课程信息成功!'
         })
+        // 跳转到第二步
+        this.$router.push({ path: '/course/chapter/' + this.courseId })
+      })
     },
     saveOrUpdate() {
       // 判断修改还是添加

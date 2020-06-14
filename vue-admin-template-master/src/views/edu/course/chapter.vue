@@ -71,14 +71,15 @@
             <el-radio :label="false">默认</el-radio>
           </el-radio-group>
         </el-form-item>
+        <!-- 上传视频 -->
         <el-form-item label="上传视频">
-          <!-- <el-upload
+          <el-upload
             :on-success="handleVodUploadSuccess"
             :on-remove="handleVodRemove"
             :before-remove="beforeVodRemove"
             :on-exceed="handleUploadExceed"
             :file-list="fileList"
-            :action="BASE_API+'/eduvod/video/uploadAlyVideo'"
+            :action="BASE_API+'/eduvod/video/uploadAliyunVideo'"
             :limit="1"
             class="upload-demo"
           >
@@ -86,14 +87,14 @@
             <el-tooltip placement="right-end">
               <div slot="content">
                 最大支持1G，
-                <br />支持3GP、ASF、AVI、DAT、DV、FLV、F4V、
-                <br />GIF、M2T、M4V、MJ2、MJPEG、MKV、MOV、MP4、
-                <br />MPE、MPG、MPEG、MTS、OGG、QT、RM、RMVB、
-                <br />SWF、TS、VOB、WMV、WEBM 等视频格式上传
+                <br >支持3GP、ASF、AVI、DAT、DV、FLV、F4V、
+                <br >GIF、M2T、M4V、MJ2、MJPEG、MKV、MOV、MP4、
+                <br >MPE、MPG、MPEG、MTS、OGG、QT、RM、RMVB、
+                <br >SWF、TS、VOB、WMV、WEBM 等视频格式上传
               </div>
               <i class="el-icon-question" />
             </el-tooltip>
-          </el-upload> -->
+          </el-upload>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -119,7 +120,8 @@ export default {
         title: '',
         sort: 0,
         free: 0,
-        videoSourceId: ''
+        videoSourceId: '',
+        videoOriginalName: ''// 视频名称
       },
       courseId: '',
       chapterVideoList: [],
@@ -128,7 +130,9 @@ export default {
       dialogVideoFormVisible: false, // 小节管理
       saveVideoBtnDisabled: false, // 小节保存按钮是否禁用
       from_chapter: '',
-      from_video: ''
+      from_video: '',
+      fileList: [], // 上传文件列表
+      BASE_API: process.env.BASE_API // 接口API地址
     }
   },
 
@@ -142,6 +146,28 @@ export default {
   },
 
   methods: {
+    // 上传视频成功调用方法
+    handleVodUploadSuccess(response, file, fileList) {
+      // 上传视频id赋值
+      this.video.videoSourceId = response.data.videoId
+      // 上传视频名称赋值
+      this.video.videoOriginalName = file.name
+    },
+    //
+    handleUploadExceed() {
+      this.$message({
+        type: 'warning',
+        message: '想要重新上传视频，清先删除已上传的视频'
+      })
+    },
+    // 删除视频之前
+    beforeVodRemove() {
+
+    },
+    //
+    handleVodRemove() {
+
+    },
     // =====================章节操作=======================
     // 根据id查询章节小节
     getChapterVideo() {
