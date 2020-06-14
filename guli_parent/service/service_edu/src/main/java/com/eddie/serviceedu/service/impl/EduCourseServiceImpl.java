@@ -1,17 +1,23 @@
 package com.eddie.serviceedu.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eddie.servicebase.exceptionhandler.GuliException;
 import com.eddie.serviceedu.entity.EduCourse;
 import com.eddie.serviceedu.entity.EduCourseDescription;
 import com.eddie.serviceedu.entity.vo.CourseInfoVo;
 import com.eddie.serviceedu.entity.vo.CoursePublishVo;
+import com.eddie.serviceedu.entity.vo.CourseQuery;
 import com.eddie.serviceedu.mapper.EduCourseMapper;
+import com.eddie.serviceedu.service.EduChapterService;
 import com.eddie.serviceedu.service.EduCourseDescriptionService;
 import com.eddie.serviceedu.service.EduCourseService;
+import com.eddie.serviceedu.service.EduVideoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * <p>
@@ -29,6 +35,21 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
      */
     @Autowired
     private EduCourseDescriptionService courseDescriptionService;
+
+    /**
+     * 小节service
+     */
+    @Autowired
+    private EduVideoService eduVideoService;
+
+    /**
+     * 章节service
+     */
+    @Autowired
+    private EduChapterService eduChapterService;
+
+    @Autowired
+    private EduCourseDescriptionService eduCourseDescriptionService;
 
     /**
      * 添加课程基本信息的方法
@@ -110,4 +131,49 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         CoursePublishVo coursePublishVo = baseMapper.getPublishCourseInfo(id);
         return coursePublishVo;
     }
+
+    /**
+     * 多条件课程分页查询
+     * @param coursePage
+     * @param courseQuery
+     */
+    @Override
+    public void pageQuery(Page<EduCourse> coursePage, CourseQuery courseQuery) {
+        // 构建条件
+        QueryWrapper<EduCourse> courseWrapper = new QueryWrapper<>();
+        courseWrapper.orderByDesc();
+        System.out.println(courseQuery);
+        // 如果courseQuery对象为空，则直接返回分页信息
+        if (courseQuery == null){
+            baseMapper.selectPage(coursePage,courseWrapper);
+            return;
+        }
+        // 多条件组合查询
+        String title = courseQuery.getTitle();
+        String status = courseQuery.getStatus();
+        if (!StringUtils.isEmpty(title)){
+            courseWrapper.like("title",title);
+        }
+        if (!StringUtils.isEmpty(status)){
+            courseWrapper.eq("status",status);
+        }
+        baseMapper.selectPage(coursePage,courseWrapper);
+    }
+
+    @Override
+    public void removeCourse(String courseId) {
+        // 1、根据课程id删除小节
+        eduVideoService.removeVideoByCourseId(courseId);
+        // 2、根据课程id删除章节
+        eduChapterService.removeChapterByCourseId(courseId);
+        // 3、根据课程id删除描述
+        eduCourseDescriptionService.removeById(courseId);
+        // 4、根据课程id删除课程本身
+        int result = baseMapper.deleteById(courseId);
+        if (result == 0){
+            throw new GuliException(20001,"删除失败");
+        }
+    }
+
+
 }

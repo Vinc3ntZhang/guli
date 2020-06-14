@@ -107,4 +107,15 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
             return result>0;
         }
     }
+
+    /**
+     * 根据课程id删除章节
+     * @param courseId
+     */
+    @Override
+    public void removeChapterByCourseId(String courseId) {
+        QueryWrapper<EduChapter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("course_id",courseId);
+        baseMapper.delete(queryWrapper);
+    }
 }
